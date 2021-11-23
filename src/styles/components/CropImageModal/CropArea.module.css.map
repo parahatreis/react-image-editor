@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,SAAS,CAAC;EACR,MAAM,EAAE,MAAM;CAKf;;AAND,AAGE,SAHO,CAGP,iBAAiB,CAAA;EACf,KAAK,EAAE,KAAK;CACb",
+    "sources": [
+        "CropArea.module.scss"
+    ],
+    "names": [],
+    "file": "CropArea.module.css"
+}

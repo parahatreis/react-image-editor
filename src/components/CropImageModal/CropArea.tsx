@@ -1,19 +1,27 @@
 // Components
-import {useState, useRef, useCallback, useEffect} from 'react'
+import React, {useState, useRef, useCallback, useEffect} from 'react'
 import ReactCrop from 'react-image-crop';
 import {useSelector} from 'react-redux';
 // Styles
 import styles from '../../styles/components/CropImageModal/CropArea.module.scss';
 import 'react-image-crop/dist/ReactCrop.css';
-// utils
-import convertBase64ToFile from '../../utils/convertBase64ToFile';
+// Types
+import { Rootstate } from '../../types/Rootstate';
 
-const CropArea = ({handleSetNewImageFile, previewCanvasRef, handleSetCrop, crop, handleSetCompletedCrop, completedCrop}) => {
+type Props = {
+  handleSetCrop: (c: object) => void;
+  handleSetCompletedCrop: (c: object) => void;
+  previewCanvasRef: any;
+  crop: object;
+  completedCrop: any;
+}
+
+const CropArea: React.FC<Props> = ({previewCanvasRef, handleSetCrop, crop, handleSetCompletedCrop, completedCrop}) => {
   // External Hooks
-  const imageFile = useSelector((state) => state.images.imageFile);
+  const imageFile = useSelector((state: Rootstate) => state.images.imageFile);
   // Inner Hooks
-  const imgRef = useRef(null);
-  const [innerImage, setInnerImage] = useState(null);
+  const imgRef = useRef<any>(null);
+  const [innerImage, setInnerImage] = useState<string | null>(null);
 
   // Get image file
   useEffect(() => {
@@ -49,6 +57,7 @@ const CropArea = ({handleSetNewImageFile, previewCanvasRef, handleSetCrop, crop,
     ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     ctx.imageSmoothingQuality = 'high';
 
+    // Draw Preview Image
     ctx.drawImage(
       image,
       crop.x * scaleX,
@@ -60,11 +69,6 @@ const CropArea = ({handleSetNewImageFile, previewCanvasRef, handleSetCrop, crop,
       crop.width * scaleX,
       crop.height * scaleY
     );
-
-    // convert Base64 to File
-    const base64Image = canvas.toDataURL("image/jpeg");
-    convertBase64ToFile(base64Image)
-      .then((file) => handleSetNewImageFile(file));
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [completedCrop]);
@@ -79,15 +83,15 @@ const CropArea = ({handleSetNewImageFile, previewCanvasRef, handleSetCrop, crop,
             crop={crop}
             style={{ maxWidth: '500px', maxHeight: '500px' }}
             imageStyle={{height: '100%'}}
-            onChange={(c) => handleSetCrop(c)}
-            onComplete={(c) => handleSetCompletedCrop(c)}
+            onChange={(c: object) => handleSetCrop(c)}
+            onComplete={(c: object) => handleSetCompletedCrop(c)}
           />
           <div>
             <canvas
               ref={previewCanvasRef}
               style={{
-                width: Math.round(completedCrop?.width ?? 0),
-                height: Math.round(completedCrop?.height ?? 0)
+                width: Math.round(completedCrop ? completedCrop.width : 0),
+                height: Math.round(completedCrop ? completedCrop.height : 0)
               }}
             />
           </div>

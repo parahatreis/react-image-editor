@@ -1,4 +1,4 @@
-import { useState, useRef} from 'react';
+import React, { useState, useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 // Components
 import Box from '@mui/material/Box';
@@ -7,9 +7,10 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import CropArea from './CropArea';
-// styles
+// Types
+import { Rootstate } from '../../types/Rootstate';
 
-const style = {
+const style: object = {
   position: 'absolute',
   top: '50%',
   left: '50%',
@@ -23,32 +24,32 @@ const style = {
   overflowY: 'auto'
 };
 
-const CropImageModal = () => {
+const CropImageModal: React.FC = () => {
   // External State
-  const modalVisible = useSelector((state) => state.images.modalVisible);
+  const modalVisible = useSelector((state: Rootstate) => state.images.modalVisible);
   const dispatch = useDispatch();
   // Internal State
-  const [newImageFile, setNewImageFile] = useState(null);
-  const [crop, setCrop] = useState({
+  const [completedCrop, setCompletedCrop] = useState<any>(null);
+  const previewCanvasRef = useRef(null);
+  const [crop, setCrop] = useState<object>({
     unit: '%',
     width: 50,
     height: 50,
   });
-  const previewCanvasRef = useRef(null);
-  const [completedCrop, setCompletedCrop] = useState(null);
 
   // Functions for components state changes
-  const handleSetNewImageFile = (file) => setNewImageFile(file);
-  const handleSetCrop = (c) => setCrop(c);
-  const handleSetCompletedCrop = (c) => setCompletedCrop(c);
+  const handleSetCrop = (c: object) => setCrop(c);
+  const handleSetCompletedCrop = (c: object) => setCompletedCrop(c);
   const handleCloseModal = () => dispatch({ type: 'SET_MODAL_VISIBLE', payload: false })
 
-  const handleDownlodaImage = (canvas, crop) => {
+  // Download image
+  const handleDownlodaImage = (canvas: any, crop: (object | null)) => {
     if (!crop || !canvas) {
       return;
     }
     canvas.toBlob(
-      (blob) => {
+      (blob: any) => {
+        // Createds Url for image
         const previewUrl = window.URL.createObjectURL(blob);
 
         const anchor = document.createElement('a');
@@ -71,7 +72,6 @@ const CropImageModal = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-
           {/* Header */}
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Crop the image
@@ -82,14 +82,11 @@ const CropImageModal = () => {
 
           {/* Crop Area */}
           <CropArea
-            newImageFile={newImageFile}
-            handleSetNewImageFile={handleSetNewImageFile}
-            handleDownlodaImage={handleDownlodaImage}
-            crop={crop}
             handleSetCrop={handleSetCrop}
-            previewCanvasRef={previewCanvasRef}
             handleSetCompletedCrop={handleSetCompletedCrop}
             completedCrop={completedCrop}
+            crop={crop}
+            previewCanvasRef={previewCanvasRef}
           />
 
           {/* Buttons */}

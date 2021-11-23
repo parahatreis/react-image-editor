@@ -12,15 +12,16 @@ const UploadImage = () => {
   // External Hooks
   const dispatch = useDispatch();
   // Internal Hooks
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
   const { getRootProps, getInputProps, open , isDragActive, isDragReject, isDragAccept } = useDropzone({
-    onDrop: files => selectFile(files[0]),
+    onDrop: (files) => selectFile(files[0]),
     noClick: true,
     noKeyboard: true,
     multiple: false,
     accept: 'image/jpeg, image/png, image/svg'
   })
 
+  // Give effect while dragging image on screen
   useEffect(() => {
     setIsDragging(isDragActive);
   }, [
@@ -29,7 +30,8 @@ const UploadImage = () => {
     isDragAccept
   ])
 
-  const selectFile = (file) => {
+  // Set selected image file
+  const selectFile = (file: object) => {
     dispatch({ type: 'SET_IMAGE_FILE', payload: file });
   }
 

@@ -1,2 +1,0 @@
-export const SET_IMAGE_FILE = 'SET_IMAGE_FILE';
-export const SET_MODAL_VISIBLE = 'SET_MODAL_VISIBLE';

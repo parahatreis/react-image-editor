@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { fabric } from 'fabric';
-// Components
 // utils
 import convertBase64ToFile from '../../utils/convertBase64ToFile';
+// Types
+import { Rootstate } from '../../types/Rootstate';
 
 const CanvasArea = () => {
   // External Hooks
   const dispatch = useDispatch();
-  const imageFile = useSelector((state) => state.images.imageFile);
+  const imageFile = useSelector((state: Rootstate) => state.images.imageFile);
 
+  // Initialize to render selected image
   useEffect(() => {
     if (imageFile) {
       initCanvas(imageFile);
@@ -17,7 +19,7 @@ const CanvasArea = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageFile])
 
-  const initCanvas = (imageValue) => {
+  const initCanvas = (imageValue: any) => {
     // Canvas settings
     const canvas = new fabric.Canvas('c', {
       height: 800,
@@ -27,7 +29,7 @@ const CanvasArea = () => {
 
     // Canvas Image settings
     const url = URL.createObjectURL(imageValue);
-    fabric.Image.fromURL(url, function (img) {
+    fabric.Image.fromURL(url, function (img: any) {
       img.scale(0.5).set({
         left: 100,
         top: 100,
@@ -42,7 +44,7 @@ const CanvasArea = () => {
       });
 
       // Double click
-      canvas.on("mouse:dblclick", function (e) {
+      canvas.on("mouse:dblclick", function (e: any) {
         if (e.target) {
           doubleClickImage(e.target._element);
         }
@@ -53,7 +55,8 @@ const CanvasArea = () => {
   }
 
   // Double click get image file and open modal
-  const doubleClickImage = (val) => {
+  const doubleClickImage = (val: any) => {
+    // Convert base64 format to file object and set state
     convertBase64ToFile(val.src)
       .then((file) => {
         dispatch({ type: 'SET_IMAGE_FILE', payload: file});

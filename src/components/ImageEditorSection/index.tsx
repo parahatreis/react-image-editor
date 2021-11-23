@@ -1,4 +1,5 @@
-import {useDispatch} from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 // Components
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -10,9 +11,9 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import CanvasArea from './CanvasArea';
 
-const ImageEditorSection = () => {
+const ImageEditorSection: React.FC = () => {
   const dispatch = useDispatch();
-  // Remove button
+  // Handle Remove button click
   const handleClickRemove = () => {
     // Remove file
     dispatch({ type: 'SET_IMAGE_FILE', payload: null});
